@@ -1,0 +1,6 @@
+{
+    "name": "Professor Ratings for Schedule Builder",
+    "description": "Pulls RateMyProfessor ratings for each professor.",
+    "version": "1.0",
+    "manifest_version": 3
+  }
