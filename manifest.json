@@ -1,6 +1,12 @@
 {
     "name": "Professor Ratings for Schedule Builder",
-    "description": "Pulls RateMyProfessor ratings for each professor.",
+    "description": "Pulls RateMyProfessors ratings for each professor.",
     "version": "1.0",
+    "content_scripts": [
+        {
+            "matches": ["*://uisapppr3.njit.edu/scbldr/"],
+            "js": ["content-script.js"]
+        }
+    ],
     "manifest_version": 3
   }
