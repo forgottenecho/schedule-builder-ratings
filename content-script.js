@@ -1,41 +1,33 @@
 console.log("Loading up RateMyProfessors for schedule builder!");
-function httpGetAsync(theUrl, callback)
+function httpGetAsync(theUrl, callback, arg)
 {
     var xmlHttp = new XMLHttpRequest();
     xmlHttp.onreadystatechange = function() { 
         if (xmlHttp.readyState == 4 && xmlHttp.status == 200)
-            callback(xmlHttp.responseText);
+            callback(xmlHttp.responseText, arg);
     }
     xmlHttp.open("GET", theUrl, true); // true for asynchronous 
     xmlHttp.send(null);
 }
 
-function init() {
-    const DELAY = 5000;
-
-    var pane = document.getElementsByClassName("course-list");
-    if (pane.length >= 1) {
-        // add in the ratings after DELAY ms
-        setTimeout(update, DELAY);
-
-        // attach necessary listenres to update ratings
-        // FIXME
-
-        // stop waiting for the page to load
-        document.body.removeEventListener("mousemove", init);
-    }
-}
 function update() {
+    console.log("Inside update");
     // snag up all professors on the page
     var profs = document.getElementsByClassName("sec-instructor");
 
-    // name formattingL [last], [first]
+    // name formatting [last], [first]
     for (var i=0; i<profs.length; i++) {
         var name = profs[i].innerText;
         console.log(name);
+        // var url = "https://www.ratemyprofessors.com/search/teachers?query="+encodeURIComponent(name)+"&sid=U2Nob29sLTY2OA==";
+        // console.log(url);
+        // httpGetAsync(url, append, profs[i]);
     }
 
     return profs.length;
 }
 
-document.body.addEventListener("mousemove", init);
+function append(html, prof) {
+    console.log(prof);
+}
+window.addEventListener("load", update);
