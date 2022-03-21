@@ -1,4 +1,4 @@
-API_ENDPOINT = "http://localhost/"
+API_ENDPOINT = "http://localhost:5000/rating"
 
 console.log("Loading up RateMyProfessors for schedule builder!");
 
@@ -23,19 +23,35 @@ function update() {
 
     // name formatting [last], [first]
     for (var i=0; i<profs.length; i++) {
+        // get HTML text of prof name [last], [first]
         var name = profs[i].innerText;
         console.log('Processing professor: '+ name);
-        var url = API_ENDPOINT + encodeURIComponent(name);
-        httpGetAsync(url, appendRating, profs[i]);
-        // console.log(url);
+
+        // split the name into its parts
+        var parts = name.split(',');
+        var firstName = parts[1].trim();
+        var lastName = parts[0].trim();
+
+        // get their rating from API
+        var url = API_ENDPOINT + '?firstName=' + encodeURIComponent(firstName) + '&lastName=' + encodeURIComponent(lastName) + '&uni=NJIT';
+        console.log(url);
+        httpGetAsync(url, appendRating, profs[i]); // call back gets resptxt and elem
     }
 
     return profs.length;
 }
 
 // this is the callback for the HTTP req
-function appendRating(html, prof) {
-    console.log(prof);
+function appendRating(rating, prof) {
+    console.log('API gave ' + prof.innerText + 'rating: ' + rating);
+    
+    // if it is an integer, append '.0'
+    if (rating.length == 1) {
+        rating += '.0';
+    }
+
+    // append rating to the html
+    prof.innerHTML += ' (' + rating + ')';
 }
 
 // call update() all resources have loaded
