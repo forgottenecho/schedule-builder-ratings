@@ -1,4 +1,8 @@
+API_ENDPOINT = "http://localhost/"
+
 console.log("Loading up RateMyProfessors for schedule builder!");
+
+// creates async requests
 function httpGetAsync(theUrl, callback, arg)
 {
     var xmlHttp = new XMLHttpRequest();
@@ -10,24 +14,29 @@ function httpGetAsync(theUrl, callback, arg)
     xmlHttp.send(null);
 }
 
+// gets a rating for each professor and updates the HTML accordingly
 function update() {
     console.log("Inside update");
+
     // snag up all professors on the page
-    var profs = document.getElementsByClassName("sec-instructor");
+    var profs = document.querySelectorAll(".sec-instructor");
 
     // name formatting [last], [first]
     for (var i=0; i<profs.length; i++) {
         var name = profs[i].innerText;
-        console.log(name);
-        // var url = "https://www.ratemyprofessors.com/search/teachers?query="+encodeURIComponent(name)+"&sid=U2Nob29sLTY2OA==";
+        console.log('Processing professor: '+ name);
+        var url = API_ENDPOINT + encodeURIComponent(name);
+        httpGetAsync(url, appendRating, profs[i]);
         // console.log(url);
-        // httpGetAsync(url, append, profs[i]);
     }
 
     return profs.length;
 }
 
-function append(html, prof) {
+// this is the callback for the HTTP req
+function appendRating(html, prof) {
     console.log(prof);
 }
+
+// call update() all resources have loaded
 window.addEventListener("load", update);
