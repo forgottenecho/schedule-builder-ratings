@@ -8,7 +8,7 @@ cache = {}
 console.log("Loading up RateMyProfessors for schedule builder!");
 
 // creates async requests
-function httpGetAsync(theUrl, callback, arg1, arg2)
+function x(theUrl, callback, arg1, arg2)
 {
     var xmlHttp = new XMLHttpRequest();
     xmlHttp.onreadystatechange = function() { 
@@ -20,7 +20,7 @@ function httpGetAsync(theUrl, callback, arg1, arg2)
 }
 
 // name processing helper func
-function getFullName(nameText) {
+function w(nameText) {
     // split the name into its parts
     var parts = nameText.split('(')[0].split(',');
 
@@ -35,7 +35,7 @@ function getFullName(nameText) {
 }
 
 // gets a rating for each professor and updates the HTML accordingly
-function update() {
+function z() {
     console.log("Inside update");
 
     // snag up all professors on the page
@@ -60,7 +60,7 @@ function update() {
 
         console.log('Processing professor: '+ nameStr);
 
-        var fullName = getFullName(nameStr)
+        var fullName = w(nameStr)
         
         if (fullName === undefined) {
             console.log("Some name problem, skpping");
@@ -76,7 +76,7 @@ function update() {
                 continue; // we'll have to try to process it again later
             }
             console.log("CACHE HIT")
-            appendRating(rating, profs[i], false);
+            y(rating, profs[i], false);
         } else {
             // get prof's rating from API
             var parts = fullName.split(' ');
@@ -84,7 +84,7 @@ function update() {
             var lastName = parts[1];
             var url = API_ENDPOINT + '?firstName=' + encodeURIComponent(firstName) + '&lastName=' + encodeURIComponent(lastName) + '&uni=NJIT';
             console.log(url);
-            httpGetAsync(url, appendRating, profs[i], true); // call back gets resptxt and elem
+            x(url, y, profs[i], true); // call back gets resptxt and elem
             
             // reserve cache space with uninit'd value
             cache[fullName] = '';
@@ -94,13 +94,13 @@ function update() {
 
     
     // call self again after certain amount of time
-    setTimeout(update, REFRESH_RATE*1000);
+    setTimeout(z, REFRESH_RATE*1000);
 
     return profs.length;
 }
 
 // this is the callback for the HTTP req
-function appendRating(rating, prof, updateCache) {
+function y(rating, prof, updateCache) {
     // update cache if necessary
     if (updateCache) {
         // if it is an integer, append '.0'
@@ -109,7 +109,7 @@ function appendRating(rating, prof, updateCache) {
         }
 
         console.log('API gave ' + prof.innerText + ' rating: ' + rating);
-        cache[getFullName(prof.innerText)] = rating;
+        cache[w(prof.innerText)] = rating;
         console.log('Cache updated');
     }
 
@@ -119,4 +119,4 @@ function appendRating(rating, prof, updateCache) {
 }
 
 // call update() all resources have loaded
-window.addEventListener("load", update);
+window.addEventListener("load", z);
